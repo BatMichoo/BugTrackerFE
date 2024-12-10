@@ -1,0 +1,44 @@
+﻿.work-container {
+    max-width: 95vw;
+    margin: 0 0;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-inputs {
+    display: flex;
+    gap: 0.5em;
+    flex-wrap: wrap;
+    justify-content: center;
+    list-style-type: none;
+}
+
+.param-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+.item-container {
+    width: 95%;
+}
+
+.item-table {
+    width: 100%;
+    text-align: center;
+    border: solid 2px gray;
+    table-layout: auto;
+}
+
+.item-table thead {
+    border-bottom: solid 2px gray;
+}
+
+.item-table tfoot {
+    border-top: solid 2px gray;
+}
