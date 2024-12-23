@@ -1,0 +1,22 @@
+﻿.login-container, .login-form, .login-input {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5em;
+}
+
+h1 {
+    text-align: center;
+    padding: 1em;
+}
+
+.login-form {
+    padding: 1em;
+    align-items: center;
+}
+
+.login-input {
+    text-align: center;
+    margin: 1em auto;
+    max-width: 200px;
+}

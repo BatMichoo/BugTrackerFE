@@ -1,28 +1,28 @@
 ﻿@using Core.Utilities;
 @using Presentation.Controllers;
-@using Presentation.Models.Bugs;
+@using Core.Models.Bugs;
 
 @model PagedList<BugViewModel>
 
 <div class="work-container">
     <div class="search-container">
         <h5>Search</h5>
-        <form method="" action="Get"></form> 
+        <form method="post" action="Get"></form> 
         </div>
     <div class="item-container">
         <table class="item-table">
-            <thead>
+            <thead class="item-table-head">
                 <tr>
                     <th>Priority</th>
                     <th>Status</th>
-                    <th>Description</th>
+                    <th>Title</th>
                     <th>Created By</th>
                     <th>Assigned To</th>
-                    <th>Lock</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @if (Model.Items.Count == 0)
+                @if (Model is null || Model.Items.Count == 0)
                 {
                     <tr class="no-results">
                         <td></td>
@@ -34,32 +34,41 @@
                 }
                 else
                 {
-                    foreach (var item in Model.Items)
+                    foreach (var item in Model?.Items)
                     {
                         <tr class="item-row">
                             <td>@item.Priority</td>
                             <td>@item.Status</td>
-                            <td>@item.Description</td>
+                            <td>@item.Title</td>
                             <td>@item.CreatedBy</td>
                             <td>@item.AssignedTo</td>
                             <td>
-                                <a asp-action="Get" asp-route-id="@item.Id">Lock</a> 
+                                <div class="actions-container">
+                                    <a asp-action="Get" asp-route-id="@item.Id">Open</a>
+                                    <a asp-action="Update" asp-route-data="@item">Edit</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                </div>                                 
                             </td>
                         </tr>
                     }
-                }                
+                }
             </tbody>
-            <tfoot>
+            <tfoot class="item-table-foot">
                 <tr>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
+                    <td>@Model.PageInfo.ElementsPerPage</td>
                     <td>
-                        @Model.PageInfo.CurrentPage / @Model.PageInfo.PageCount
+                        @Model?.PageInfo.CurrentPage / @Model?.PageInfo.PageCount
                     </td>
                 </tr>
             </tfoot>
         </table>
     </div>
+    <div>
+        <a class="create-bug submit-btn" href="@Url.Action("Create", "Work")">Create New</a>
+    </div>
 </div>
+
+<script></script>

@@ -1,22 +1,105 @@
-html {
-  font-size: 14px;
+@import url('HomeIndex.css');
+@import url('WorkIndex.css');
+@import url('WorkCreate.css');
+@import url('UserLogin.css');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
 }
 
-@media (min-width: 768px) {
-  html {
+html {
     font-size: 16px;
-  }
+    font-family: Roboto, sans-serif;
+    background-color: #f8fafc;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+@media (max-width: 768px) {
+    html {
+        font-size: 14px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.site-header {
+    border-bottom: 1px solid #a8c5db;
+    border-radius: 0.25em;
+    text-align: center;
+    background-color: #e9f2f9;
+    color: #003a63;
+    max-height: 5vh;
+    max-height: 6.5vh;
+}
+
+.navbar-container {
+    padding: 0.5em;
+}
+
+.navbar-brand {
+    min-width: 2.5%;
+    max-width: 25px;
+}
+
+.logo {
+    display: block;
+    height: 100%;
+    width: 90%;
+}
+
+.container-fluid {
+    display: flex;
+    justify-content: space-between;
+}
+
+.navbar {
+    align-content: center;
+}
+
+.navbar-nav {
+    display: flex;
+    gap: 1em;
+    list-style: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: black;
+    font-size: 1.1em;
+}
+
+.container {
+    flex: 1 0 100%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+main {
+    margin: 0 auto;
+}
+
+footer {
+    border-top: 1px solid #a8c5db;
+    border-radius: 0.5em;
+    padding: 1em;
+    background-color: #e9f2f9;
+}
+
+.submit-btn {
+    padding: 0.5em 0.75em;
+    color: white;
+    background-color: cadetblue;
+    border-color: cornflowerblue;
+    border-radius: 0.5em;
+    font-weight: bold;
+}
+
+.submit-btn:hover {
+    background-color: cornflowerblue;
 }

@@ -1,0 +1,44 @@
+﻿@using Core.Models.Bugs.Create
+@using Core.Utilities
+
+@model CreateBugViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="create-container">
+    <form method="post" asp-controller="Work" asp-action="Create">
+        <div class="form-container">
+            <div class="input-container">
+                <div class="title-container input-create">
+                    <label for="title">Title</label>
+                    <input name="title" type="text" id="title" />
+                </div>
+                <div class="desc-container input-create">
+                    <label for="description">Description</label>
+                    <input name="description" type="text" id="description" />
+                </div>
+                <div class="prio-container input-create">
+                    <label for="priority">Priority</label>
+                    <select name="priority" id="priority">
+                        @foreach (var prio in Enum.GetValues(typeof(BugPriority)))
+                        {
+                            <option value="@prio.ToString()">@prio.ToString()</option>
+                        }
+                    </select>
+                </div>
+                <div class="assigned-container input-create">
+                    <label for="users">Assigned to</label>
+                    <select name="assignedTo" id="users">
+                        @foreach (var user in Model.Users)
+                        {
+                            <option value="@user.Id">@user.UserName</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <button class="submit-btn" type="submit">Create</button>
+        </div>
+    </form>
+</div>

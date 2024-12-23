@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using Presentation.Models.Login;
 using Presentation.Models.Register;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Presentation.Controllers
 {
@@ -42,7 +42,7 @@ namespace Presentation.Controllers
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
 
-                return RedirectToAction("Index", "Work");
+                return RedirectToAction("Index", "Home");
             }
 
             return View(login);
@@ -65,7 +65,7 @@ namespace Presentation.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    await HttpContext.SignOutAsync();
+                    await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
                 }
             }
 
@@ -79,6 +79,8 @@ namespace Presentation.Controllers
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(responseContent.Token);
             var claims = jwtToken.Claims;
+
+            claims = claims.Append(new Claim("Token", responseContent.Token));
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);

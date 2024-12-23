@@ -1,9 +1,17 @@
 ﻿<div class="login-container">
-    <form method="post">
-        <label>Email</label>
-        <input type="email" name="email"/>
-        <label>Password</label>
-        <input type="password" name="password"/>
-        <button type="submit">Submit</button>
+    <h1>Enter your credentials: </h1>
+
+    <form class="login-form" method="post">
+        <div class="login-inputs">
+            <div class="login-input">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" />
+            </div>
+            <div class="login-input">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" />
+            </div>
+        </div>
+        <button class="submit-btn" type="submit">Login</button>
     </form>
 </div>

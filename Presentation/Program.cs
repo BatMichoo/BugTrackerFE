@@ -1,7 +1,6 @@
+using Core.Services;
 using Core.Utilities;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 namespace Presentation
 {
@@ -16,35 +15,23 @@ namespace Presentation
 
             builder.Services.AddHttpClient("Backend", c =>
             {
-                c.BaseAddress = new Uri(Urls.Backend);
+                c.BaseAddress = new Uri(Urls.Backend.BaseAdress);
             });
 
-            builder.Services.AddAuthentication(options =>
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opt =>
             {
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            })
-            .AddCookie(options =>
-            {
-                options.LoginPath = "/user/login";
-            })
-            .AddJwtBearer(opt =>
-            {
-                string jwtSecretKey = Environment.GetEnvironmentVariable(builder.Configuration["Jwt:SecretKeyEnvName"]!) ??
-                    throw new ArgumentNullException("No secret key for Jwt signing.");
-
-                opt.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = "https://localhost",
-                    ValidAudience = "https://localhost",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey))
-                };
+                opt.Cookie.Name = CookieAuthenticationDefaults.CookiePrefix;
+                opt.ExpireTimeSpan = TimeSpan.FromDays(1);
+                opt.Cookie.IsEssential = true;
+                opt.Cookie.HttpOnly = true;
+                opt.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                opt.Cookie.SameSite = SameSiteMode.Strict;
+                opt.SlidingExpiration = true;
             });
+
+            builder.Services.AddScoped<BackendService>()
+                .AddHttpContextAccessor();
 
             var app = builder.Build();
 

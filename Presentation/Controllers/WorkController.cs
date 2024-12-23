@@ -1,9 +1,11 @@
-﻿using Core.Utilities;
+﻿using Core.Models.Bugs;
+using Core.Models.Bugs.Create;
+using Core.Models.Users;
+using Core.Services;
+using Core.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Presentation.Models.Bugs;
 using System.Net;
-using System.Text.Json;
 
 namespace Presentation.Controllers
 {
@@ -11,49 +13,68 @@ namespace Presentation.Controllers
     [Route("workflow")]
     public class WorkController : Controller
     {
-        private readonly IHttpClientFactory _httpClientFactory;
-        private readonly JsonSerializerOptions _jsonOptions;
+        private readonly BackendService _backendService;
 
-        public WorkController(IHttpClientFactory httpClientFactory)
+        public WorkController(BackendService backendService)
         {
-            _httpClientFactory = httpClientFactory;
-            _jsonOptions = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
+            _backendService = backendService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var bugs = new PagedList<BugViewModel>();
-
-            var client = _httpClientFactory.CreateClient("Backend");
-
-            var response = await client.GetAsync("/bugs");
-
-            if (response.IsSuccessStatusCode)
-            {
-                bugs = await response.Content.ReadFromJsonAsync<PagedList<BugViewModel>>(_jsonOptions);
-            }
-            else if (response.StatusCode == HttpStatusCode.Unauthorized)
-            {
+            var response = await _backendService.Get<PagedList<BugViewModel>>(Urls.Bug.Base);
+            
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
                 return RedirectToAction("Login", "User");
-            }
 
-            return View(bugs);
+            return View(response.Resource);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var client = _httpClientFactory.CreateClient("Backend");
+            string requestUri = Urls.Bug.Base + $"/{id}";
 
-            var response = await client.GetAsync($"/bugs/{id}");
+            var response = await _backendService.Get<BugViewModel>(requestUri);
 
-            var bug = await response.Content.ReadFromJsonAsync<BugViewModel>();
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+                return RedirectToAction("Login", "User");
 
-            return View(bug);
+            return View(response.Resource);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(int id, BugViewModel model)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Search(SearchViewModel search)
+        {
+            return View(search);
+        }
+
+        [HttpGet("create")]
+        [HttpPost("create")]
+        public async Task<IActionResult> Create([FromForm]CreateBugViewModel? model)
+        {
+            if (!ModelState.IsValid)
+            {
+                var userResponse = await _backendService.Get<List<UserViewModel>>("/users");
+
+                return View(new CreateBugViewModel
+                {
+                    Users = userResponse.Resource
+                });
+            }
+
+            var mappedModel = CreateBugModel.MapFrom(model);
+
+            var response = await _backendService.Post<BugViewModel>(Urls.Bug.Base, mappedModel);
+
+            return RedirectToAction("Get", new { id = response.Resource.Id, response.Resource });
         }
     }
 }

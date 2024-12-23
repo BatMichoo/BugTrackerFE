@@ -1,5 +1,4 @@
 ﻿.work-container {
-    max-width: 95vw;
     margin: 0 0;
     padding: 1em;
     display: flex;
@@ -31,14 +30,30 @@
 .item-table {
     width: 100%;
     text-align: center;
-    border: solid 2px gray;
-    table-layout: auto;
+    border: 2px solid gray;
+    border-radius: 1em;
 }
 
-.item-table thead {
-    border-bottom: solid 2px gray;
+.item-table-head {
 }
 
-.item-table tfoot {
-    border-top: solid 2px gray;
+.item-table-foot {
+}
+
+tr::after {
+    content: '';
+    display: block;
+    border-bottom: 2px solid gray;
+}
+
+tr:last-child::after {
+    border: none;
+}
+
+th, td {
+    padding: 0.25em;
+}
+
+.create-bug {
+    text-decoration: none;
 }

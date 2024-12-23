@@ -1,10 +1,10 @@
-﻿using Core.Utilities;
-using Core.Utilities.JsonConverters;
+﻿using Core.Utilities.JsonConverters;
+using Core.Utilities;
 using System.Text.Json.Serialization;
 
-namespace Presentation.Models.Bugs
+namespace Core.Models.Bugs
 {
-    public class BugViewModel
+    public class EditBugViewModel
     {
         public int Id { get; set; }
 
