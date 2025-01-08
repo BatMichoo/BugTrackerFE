@@ -31,6 +31,7 @@
                 <div class="assigned-container input-create">
                     <label for="users">Assigned to</label>
                     <select name="assignedTo" id="users">
+                        <option value="">N/A</option>
                         @foreach (var user in Model.Users)
                         {
                             <option value="@user.Id">@user.UserName</option>

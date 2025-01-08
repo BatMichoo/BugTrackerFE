@@ -8,14 +8,31 @@
     justify-content: center;
 }
 
-.search-inputs {
-    display: flex;
-    gap: 0.5em;
-    flex-wrap: wrap;
-    justify-content: center;
-    list-style-type: none;
+.work-container > div {
+    width: 90%;
 }
 
+.search-input-container {
+    display: flex;
+    gap: 2em;
+    flex-wrap: wrap;
+    list-style-type: none;
+    justify-content: center;
+    border: 0.5px solid gray;
+    border-radius: 0.5em;
+    padding: 1em;
+}
+
+.search-input label {
+    font-size: 0.8em;
+    margin-left: 1em;
+}
+
+.search-input input {
+    height: 2em;
+    padding: 0.5em;
+    margin: 0em 1em;
+}
 .param-container {
     display: flex;
     flex-direction: column;
@@ -24,36 +41,95 @@
 }
 
 .item-container {
-    width: 95%;
-}
-
-.item-table {
-    width: 100%;
-    text-align: center;
-    border: 2px solid gray;
     border-radius: 1em;
 }
 
-.item-table-head {
+.item-table {
+    width: 95%;
+    border-collapse: collapse;
+    margin: 1em auto 0 auto;
+    font-size: 14px;
 }
 
-.item-table-foot {
+    .item-table th, .item-table td {
+        padding: 12px;
+    }
+
+    .item-table th {
+        background-color: #e9f2f9;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .item-table td {
+        background-color: #f8fafc;
+        border-bottom: 1px solid #eee;
+    }
+
+    .item-table .item-row:hover {
+        background-color: #f1f1f1;
+    }
+
+    .item-table .no-results {
+        text-align: center;
+        font-style: italic;
+        color: #999;
+    }
+
+    .item-table .item-table-foot td {
+        background-color: #e9f2f9;
+        font-weight: bold;
+    }
+
+.actions-container {
+    display: flex;
+    gap: 10px;
 }
 
-tr::after {
-    content: '';
-    display: block;
-    border-bottom: 2px solid gray;
+    .actions-container a, .delete-btn {
+        background-color: #2196f3;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 4px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+        .actions-container a:hover, .delete-btn:hover {
+            background-color: #1976d2;
+        }
+
+.delete-btn {
+    background-color: #e53935;
 }
 
-tr:last-child::after {
-    border: none;
+    .delete-btn:hover {
+        background-color: #d32f2f;
+    }
+
+.item-table tfoot td {
+    font-weight: bold;
+    color: #333;
+    background-color: #f9f9f9;
 }
 
-th, td {
-    padding: 0.25em;
-}
+@media (max-width: 768px) {
+    .item-table {
+        font-size: 12px;
+    }
 
-.create-bug {
-    text-decoration: none;
+    .actions-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+        .actions-container a, .delete-btn {
+            width: 100%;
+            text-align: center;
+        }
+
+    .item-table th, .item-table td {
+        padding: 8px;
+    }
 }

@@ -2,12 +2,43 @@
 @using Presentation.Controllers;
 @using Core.Models.Bugs;
 
+@{
+    ViewData["Title"] = "Workflow";
+}
+
 @model PagedList<BugViewModel>
 
 <div class="work-container">
     <div class="search-container">
         <h5>Search</h5>
-        <form method="post" action="Get"></form> 
+        <form method="post" asp-controller="Work" asp-action="Search">
+            <ul class="search-input-container">
+                <div class="search-input">
+                    <label>Id</label>
+                    <input type="text" name="Id" />
+                </div>
+                <div class="search-input">
+                    <label>Priority</label>
+                    <input type="text" name="Priority" />
+                </div>
+                <div class="search-input">
+                    <label>Status</label>
+                    <input type="text" name="Status" />
+                </div>
+                <div class="search-input">
+                    <label>Assigned To</label>
+                    <input type="text" name="AssignedTo" />
+                </div>
+                <div class="search-input">
+                    <label>Title</label>
+                    <input type="text" name="Title" />
+                </div>
+            </ul>
+            <div class="btn-container">
+                <button type="submit">Search</button>
+                <button type="submit">Reset</button>
+            </div>
+        </form> 
         </div>
     <div class="item-container">
         <table class="item-table">
@@ -30,6 +61,7 @@
                         <td>No Results.</td>
                         <td></td>
                         <td></td>
+                        <td></td>
                     </tr>
                 }
                 else
@@ -45,8 +77,9 @@
                             <td>
                                 <div class="actions-container">
                                     <a asp-action="Get" asp-route-id="@item.Id">Open</a>
-                                    <a asp-action="Update" asp-route-data="@item">Edit</a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                    <a asp-action="Update" asp-route-id="@item.Id">Edit</a>
+                                    <a asp-action="Close" asp-route-id="@item.Id">Close</a>
+                                    <button class="delete-btn" onclick="deleteResource(@item.Id)">Delete</button>
                                 </div>                                 
                             </td>
                         </tr>
@@ -60,8 +93,11 @@
                     <td></td>
                     <td>@Model.PageInfo.ElementsPerPage</td>
                     <td>
+                        <a href=""> < </a>
                         @Model?.PageInfo.CurrentPage / @Model?.PageInfo.PageCount
+                        <a href=""> > </a>
                     </td>
+                    <td></td>
                 </tr>
             </tfoot>
         </table>
@@ -71,4 +107,19 @@
     </div>
 </div>
 
-<script></script>
+<script>
+    async function deleteResource(id) {
+        if (window.confirm("Do you really want to delete this bug?")) {
+            const response = await fetch(`/workflow/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok || response.redirected) {
+                alert('Resource deleted successfully');
+                window.location.reload();
+            } else {
+                alert('Failed to delete resource');
+            }
+        }
+    }
+</script>

@@ -14,5 +14,17 @@
             public const string AssignedTo = Base + "/assigned-to";
             public const string CreatedBy = Base + "/created-by";
         }
+
+        public static class Comment
+        {
+            public const string Base = Bug.Base + "/{bugId}/comments";
+        }
+
+        public static string ToFormattableString(string stringToFormat)
+        {
+
+
+            return string.Empty;
+        }
     }
 }

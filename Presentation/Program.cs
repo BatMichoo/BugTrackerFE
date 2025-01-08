@@ -33,6 +33,8 @@ namespace Presentation
             builder.Services.AddScoped<BackendService>()
                 .AddHttpContextAccessor();
 
+            builder.Services.AddScoped<IFilterFactory, FilterFactory>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

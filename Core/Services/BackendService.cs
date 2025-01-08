@@ -25,7 +25,7 @@ namespace Core.Services
         }
 
         public async Task<ApiResponseModel<T>> Get<T>(string requestUri)
-            where T : class
+            where T : class, new()
         {
             HttpClient client = CreateBackendClient();
 
@@ -35,7 +35,7 @@ namespace Core.Services
         }
 
         public async Task<ApiResponseModel<T>> Post<T>(string requestUri, object model)
-            where T : class
+            where T : class, new()
         {
             HttpClient client = CreateBackendClient();
 
@@ -47,7 +47,7 @@ namespace Core.Services
         }
 
         public async Task<ApiResponseModel<T>> Patch<T>(string requestUri, object model)
-            where T: class
+            where T : class, new()
         {
             HttpClient client = CreateBackendClient();
 
@@ -59,7 +59,7 @@ namespace Core.Services
         }
 
         public async Task<ApiResponseModel<T>> Put<T>(string requestUri, object model)
-            where T : class
+            where T : class, new()
         {
             HttpClient client = CreateBackendClient();
 
@@ -71,7 +71,7 @@ namespace Core.Services
         }
 
         public async Task<ApiResponseModel<T>> Delete<T>(string requestUri)
-            where T : class
+            where T : class, new()
         {
             HttpClient client = CreateBackendClient();
 
@@ -91,9 +91,20 @@ namespace Core.Services
             return client;
         }
 
-        private async Task<ApiResponseModel<T>> ParseResponse<T>(HttpResponseMessage response) where T : class
+        private async Task<ApiResponseModel<T>> ParseResponse<T>(HttpResponseMessage response) where T : class, new()
         {
-            var resource = response.IsSuccessStatusCode ? await response.Content.ReadFromJsonAsync<T>(_jsonOptions) : null;
+            string contentString = await response.Content.ReadAsStringAsync();
+
+            T resource;
+
+            if (!string.IsNullOrWhiteSpace(contentString))
+            {
+                resource = JsonSerializer.Deserialize<T>(contentString, _jsonOptions);
+            }
+            else
+            {
+                resource = new T();
+            }
 
             return new ApiResponseModel<T>
             {

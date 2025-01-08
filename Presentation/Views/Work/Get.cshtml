@@ -3,24 +3,71 @@
 @model BugViewModel
 
 <div class="bug">
+    <div class="bug-header">
+        <h1>@Model.Title</h1>
+        <p>@Model.CreatedOn</p>
+    </div>
+    <div class="bug-content">
+        <div>
+            <label>Bug Information</label>
+            <div class="bug-info-container">
+                <div>
+                    <label>Id</label>
+                    <input disabled value="@Model.Id" />
+                </div>
+                
+                <div>
+                    <label>Status</label>
+                    <input disabled value="@Model.Status" />
+                </div>
+                <div>
+                    <label>Priority</label>
+                    <input disabled value="@Model.Priority" />
+                </div>
+                <div>
+                    <label>Description</label>
+                    <input disabled value="@Model.Description" />
+                </div>
+                <div>
+                    <label>Submitted By</label>
+                    <p>@Model.CreatedBy</p>
+                </div>
+            </div>
+            <div class="bug-info-btn-container">
+                <button>E</button>
+            </div>
+        </div>
 
-    <h2>@Model.Title</h2>
+        <div class="bug-comments">
+            <label>Comments</label>
+            <ul class="comments">
+                @foreach (var comment in Model.Comments)
+                {
+                    <li class="comment">
+                        <span>@comment.AuthorName</span>
+                        <br/>
+                        <span>@comment.Content</span>
+                        <br/>
+                        <span>@comment.Likes</span>
+                    </li>
+                }
+            </ul>
+            <div>
+                <p>Write comment</p>
+                <form asp-action="AddComment" asp-controller="Work" method="post">
+                    <input id="bugId" type="number" hidden value="@Model.Id" name="bugId" />
+                    <input id="authorId"type="text" hidden value="@User.Claims.FirstOrDefault(c => c.Type == "sub").Value" name="authorId" />
+                    <textarea id="content" name="Content"></textarea>
 
-    <label>Id</label>
-    <input disabled value="@Model.Id" />
-    <label>Description</label>
-    <input disabled value="@Model.Description" />
-    <label>Status</label>
-    <input disabled value="@Model.Status" />
-
-    <ul class="comments">
-        @foreach(var comment in Model.Comments)
-        {
-            <li class="comment">
-                <span>@comment.Content</span>
-                <br />
-                <span>@comment.Likes</span>
-            </li>
-        }
-    </ul>
+                    <button type="submit">Post</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bug-action-container">
+        <button>Reassign</button>
+        <button>Complete</button>
+        <button>Priority</button>
+    </div>
 </div>

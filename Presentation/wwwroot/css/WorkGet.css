@@ -1,0 +1,41 @@
+﻿.bug {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: center;
+    margin: 3em;
+}
+
+.bug-header h1 {
+    padding-bottom: 0.5em;
+}
+
+.bug-header p {
+    font-size: 0.75em;
+    text-align: center;
+}
+
+.bug-content {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+}
+
+.bug-info-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75em;
+}
+
+    .bug-info-container > div {
+        flex: 1 1 calc(33.333% - 0.75em);
+        display: flex;
+        flex-direction: column;
+        min-width: 150px;
+    }
+
+.bug-info-container > div:nth-child(4) {
+    flex: 1 1 100%;
+}
+
+
