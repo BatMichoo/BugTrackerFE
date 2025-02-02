@@ -8,18 +8,16 @@ namespace Core.Models.Bugs
     {
         public int Id { get; set; }
 
-        [JsonConverter(typeof(JsonDateTimeConverter))]
-        public DateTime CreatedOn { get; set; }
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public BugStatus Status { get; set; }
         [JsonConverter(typeof(JsonDateTimeConverter))]
-        public DateTime LastUpdatedOn { get; set; }
+        public DateTime? LastUpdatedOn { get; set; }
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public BugPriority Priority { get; set; }
         public string Description { get; set; } = null!;
-        public string CreatedBy { get; set; } = null!;
-        public string LastUpdatedBy { get; set; } = null!;
         public bool IsAssigned { get; set; }
+
+        [JsonPropertyName("AssigneeId")]
         public string? AssignedTo { get; set; }
     }
 }

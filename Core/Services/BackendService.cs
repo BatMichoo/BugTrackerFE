@@ -1,8 +1,6 @@
 ﻿using Core.Models;
 using Microsoft.AspNetCore.Http;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Net.Mime;
 using System.Text.Json;
 
 namespace Core.Services
@@ -99,7 +97,7 @@ namespace Core.Services
 
             if (!string.IsNullOrWhiteSpace(contentString))
             {
-                resource = JsonSerializer.Deserialize<T>(contentString, _jsonOptions);
+                resource = JsonSerializer.Deserialize<T>(contentString, _jsonOptions!);
             }
             else
             {

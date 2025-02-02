@@ -2,6 +2,10 @@
 
 @model BugViewModel
 
+@{
+    ViewData["Title"] = Model.Title;
+}
+
 <div class="bug">
     <div class="bug-header">
         <h1>@Model.Title</h1>
@@ -11,63 +15,85 @@
         <div>
             <label>Bug Information</label>
             <div class="bug-info-container">
-                <div>
-                    <label>Id</label>
-                    <input disabled value="@Model.Id" />
-                </div>
-                
-                <div>
-                    <label>Status</label>
-                    <input disabled value="@Model.Status" />
-                </div>
-                <div>
-                    <label>Priority</label>
-                    <input disabled value="@Model.Priority" />
-                </div>
-                <div>
-                    <label>Description</label>
-                    <input disabled value="@Model.Description" />
-                </div>
-                <div>
-                    <label>Submitted By</label>
-                    <p>@Model.CreatedBy</p>
-                </div>
-            </div>
-            <div class="bug-info-btn-container">
-                <button>E</button>
-            </div>
-        </div>
-
-        <div class="bug-comments">
-            <label>Comments</label>
-            <ul class="comments">
-                @foreach (var comment in Model.Comments)
-                {
-                    <li class="comment">
-                        <span>@comment.AuthorName</span>
-                        <br/>
-                        <span>@comment.Content</span>
-                        <br/>
-                        <span>@comment.Likes</span>
-                    </li>
-                }
-            </ul>
-            <div>
-                <p>Write comment</p>
-                <form asp-action="AddComment" asp-controller="Work" method="post">
-                    <input id="bugId" type="number" hidden value="@Model.Id" name="bugId" />
-                    <input id="authorId"type="text" hidden value="@User.Claims.FirstOrDefault(c => c.Type == "sub").Value" name="authorId" />
-                    <textarea id="content" name="Content"></textarea>
-
-                    <button type="submit">Post</button>
+                <form id="editForm" method="post" asp-controller="Work" asp-action="Update">
+                    <input hidden name="Title" value="@Model.Title" />
+                    <input hidden name="CreatedOn" value="@Model.CreatedOn" />
+                    <div>
+                        <label>Id</label>
+                        <input name="Id" readonly value="@Model.Id" />
+                    </div>
+                    <div>
+                        <label>Status</label>
+                        <input name="Status" class="editable-input" disabled value="@Model.Status" />
+                    </div>
+                    <div>
+                        <label>Priority</label>
+                        <input name="Priority" class="editable-input" disabled value="@Model.Priority" />
+                    </div>
+                    <div>
+                        <label>Assigned To</label>
+                        <input name="AssignedTo" class="editable-input" disabled value="@(Model.AssignedTo ?? "N/A")" />
+                    </div>
+                    <div>
+                        <label>Submitted By</label>
+                        <p>@Model.CreatedBy</p>
+                    </div>
+                    <div>
+                        <label>Description</label>
+                        <textarea name="Description" rows="4" class="editable-input" disabled>@Model.Description</textarea>
+                    </div>
                 </form>
             </div>
         </div>
+        <div class="bug-action-container">
+            <button id="edit-btn" class="submit-btn">Edit</button>
+            <button form="editForm" id="save-btn" class="submit-btn">Save</button>
+            <a asp-action="Close" asp-controller="Work" asp-route-id="@Model.Id" class="submit-btn">Mark as fixed</a>
+        </div>        
     </div>
-    
-    <div class="bug-action-container">
-        <button>Reassign</button>
-        <button>Complete</button>
-        <button>Priority</button>
+
+    <div class="bug-comments">
+        <label>Comments</label>
+        <ul class="comments">
+            @foreach (var comment in Model.Comments)
+            {
+                <li class="comment">
+                    <span>@comment.AuthorName</span>
+                    <br />
+                    <span>@comment.Content</span>
+                    <br />
+                    <span>@comment.Likes</span>
+                </li>
+            }
+        </ul>
+        <div>
+            <p>Write comment</p>
+            <form asp-action="AddComment" asp-controller="Work" method="post">
+                <input id="bugId" type="number" hidden value="@Model.Id" name="bugId" />
+                <input id="authorId" type="text" hidden value="@User.Claims.FirstOrDefault(c => c.Type == "sub")!.Value" name="authorId" />
+                <textarea id="content" name="Content"></textarea>
+
+                <button type="submit">Post</button>
+            </form>
+        </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    let toggleEdit = () =>  {
+        const editableInputs = document.getElementsByClassName('editable-input');
+
+        for (let input of editableInputs) {
+            if (input.disabled) {
+                input.disabled = false;
+            }
+            else {
+                input.disabled = true;
+            }
+        }
+    }
+
+    const editBtn = document.getElementById('edit-btn');
+
+    editBtn.addEventListener('click', toggleEdit);
+</script>

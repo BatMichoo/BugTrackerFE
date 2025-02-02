@@ -6,14 +6,18 @@ namespace Core.Utilities
     {
         public List<Filter> Create(SearchViewModel searchView)
         {
-            var filters = new List<Filter>
+            var filters = new List<Filter>();
+            var props = searchView.GetType().GetProperties();
+
+            foreach (var prop in props)
             {
-                new Filter(nameof(searchView.Id), searchView.Id == 0 ? string.Empty : searchView.Id.ToString()!),
-                new Filter(nameof(searchView.Title), searchView.Title ?? string.Empty),
-                new Filter(nameof(searchView.Priority), searchView.Priority.ToString() ?? string.Empty),
-                new Filter(nameof(searchView.Status), searchView.Status.ToString() ?? string.Empty),
-                new Filter(nameof(searchView.AssignedTo), searchView.AssignedTo ?? string.Empty)
-            };
+                var value = prop.GetValue(searchView);
+
+                if (value != null)
+                {
+                    filters.Add(new Filter(prop.Name, value.ToString()!));
+                }
+            }
 
             return filters;
         }

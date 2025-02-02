@@ -31,20 +31,17 @@ namespace Presentation.Controllers
             if (response.StatusCode == HttpStatusCode.Unauthorized)
                 return RedirectToAction("Login", "User");
 
-            return View(response.Resource);
+            return View("Index", response.Resource);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Index(PagedList<BugViewModel> filteredList)
+        private async Task<IActionResult> Index(PagedList<BugViewModel> filteredList)
         {
             if (filteredList is not null)
             {
                 return View("Index", filteredList);
             }
 
-            var response = await _backendService.Get<PagedList<BugViewModel>>(Urls.Bug.Base);
-
-            return View("Index", response.Resource);
+            return await Index();
         }
 
         [HttpGet("{id}")]
@@ -57,32 +54,57 @@ namespace Presentation.Controllers
             if (response.StatusCode == HttpStatusCode.Unauthorized)
                 return RedirectToAction("Login", "User");
 
-            return View(response.Resource);
+            return View("Get", response.Resource);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update(int id, BugViewModel model)
+        [HttpPost]
+        public async Task<IActionResult> Update([FromForm] EditBugViewModel model)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                var response = await _backendService.Put<BugViewModel>(Urls.Bug.Base, model);
+            }
+
+            return await Get(model.Id);
         }
 
-        [HttpPost("workflow/search")]
-        public async Task<IActionResult> Search(SearchViewModel search)
+        [HttpPost("search")]
+        public async Task<IActionResult> Search(SearchViewModel? search)
         {
-            var filters = _filterFactory.Create(search);
+            string filterString = string.Empty;
 
-            var filterService = new FilterService();
+            if (ModelState.IsValid)
+            {
+                var filters = _filterFactory.Create(search!);
 
-            string queryString = Urls.Bug.Base + "?" + filterService.JoinFiltersForQueryString(filters);
+                var filterService = new FilterService();
+
+                filterString = filterService.JoinFiltersForQueryString(filters);
+            }
+
+            string queryString = Urls.Bug.Base;
+
+            if (!string.IsNullOrEmpty(filterString))
+            {
+                queryString += "?" + filterString;
+            }
 
             var response = await _backendService.Get<PagedList<BugViewModel>>(queryString);
 
-            return await Index(response.Resource);
+            return await Index(response.Resource!);
+        }
+
+        [HttpGet("close/{id}")]
+        public async Task<IActionResult> Close(int id)
+        {
+            var response = await _backendService.Get<object>(Urls.Bug.Close + $"/{id}");
+
+            return await Index();
         }
 
         [HttpGet("create")]
         [HttpPost("create")]
-        public async Task<IActionResult> Create([FromForm]CreateBugViewModel? model)
+        public async Task<IActionResult> Create([FromForm] CreateBugViewModel? model)
         {
             if (!ModelState.IsValid)
             {

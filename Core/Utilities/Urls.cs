@@ -13,6 +13,7 @@
             public const string Base = "/bugs";
             public const string AssignedTo = Base + "/assigned-to";
             public const string CreatedBy = Base + "/created-by";
+            public const string Close = Base + "/close";
         }
 
         public static class Comment

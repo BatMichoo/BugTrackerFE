@@ -1,5 +1,4 @@
-﻿using Core.Models.Bugs;
-using Core.Models.Bugs.Create;
+﻿using Core.Models.Bugs.Create;
 
 namespace Core.Services
 {

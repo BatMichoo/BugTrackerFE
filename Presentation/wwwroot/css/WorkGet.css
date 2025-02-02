@@ -34,8 +34,11 @@
         min-width: 150px;
     }
 
-.bug-info-container > div:nth-child(4) {
+.bug-info-container > div:nth-child(6) {
     flex: 1 1 100%;
 }
 
-
+.editable-input {
+    padding: 0.35em;
+    border-radius: 0.5em;
+}

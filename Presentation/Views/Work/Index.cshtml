@@ -1,6 +1,7 @@
 ﻿@using Core.Utilities;
 @using Presentation.Controllers;
 @using Core.Models.Bugs;
+@using System.Security.Claims
 
 @{
     ViewData["Title"] = "Workflow";
@@ -35,8 +36,8 @@
                 </div>
             </ul>
             <div class="btn-container">
-                <button type="submit">Search</button>
-                <button type="submit">Reset</button>
+                <button class="submit-btn">Search</button>
+                <button class="submit-btn">Reset</button>
             </div>
         </form> 
         </div>
@@ -77,8 +78,6 @@
                             <td>
                                 <div class="actions-container">
                                     <a asp-action="Get" asp-route-id="@item.Id">Open</a>
-                                    <a asp-action="Update" asp-route-id="@item.Id">Edit</a>
-                                    <a asp-action="Close" asp-route-id="@item.Id">Close</a>
                                     <button class="delete-btn" onclick="deleteResource(@item.Id)">Delete</button>
                                 </div>                                 
                             </td>
