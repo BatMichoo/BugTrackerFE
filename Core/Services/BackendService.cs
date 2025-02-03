@@ -78,6 +78,16 @@ namespace Core.Services
             return await ParseResponse<T>(response);
         }
 
+        public async Task<T> GetDirect<T>(string requestUri)
+            where T : class
+        {
+            HttpClient client = CreateBackendClient();
+
+            var response = await client.GetAsync(requestUri);
+
+            return await response.Content.ReadFromJsonAsync<T>();
+        }
+
         private HttpClient CreateBackendClient()
         {
             var client = _clientFactory.CreateClient("Backend");

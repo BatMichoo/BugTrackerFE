@@ -1,6 +1,7 @@
 ﻿using Core.Models.Bugs;
 using Core.Models.Bugs.Create;
 using Core.Models.Comments;
+using Core.Models.Endpoints;
 using Core.Models.Users;
 using Core.Services;
 using Core.Utilities;
@@ -49,12 +50,20 @@ namespace Presentation.Controllers
         {
             string requestUri = Urls.Bug.Base + $"/{id}";
 
-            var response = await _backendService.Get<BugViewModel>(requestUri);
+            var resourceResponse = await _backendService.Get<BugViewModel>(requestUri);
 
-            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            if (resourceResponse.StatusCode == HttpStatusCode.Unauthorized)
                 return RedirectToAction("Login", "User");
 
-            return View("Get", response.Resource);
+            var users = await _backendService.GetDirect<List<UserViewModel>>(Urls.User.Base);
+
+            var model = new GetBugViewModel()
+            {
+                Bug = resourceResponse.Resource!,
+                Users = users
+            };
+
+            return View("Get", model);
         }
 
         [HttpPost]

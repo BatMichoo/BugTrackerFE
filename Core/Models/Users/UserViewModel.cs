@@ -2,7 +2,7 @@
 {
     public class UserViewModel
     {
-        public string Id { get; set; } = null!;
-        public string UserName { get; set; } = null!;
+        public string Id { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
     }
 }

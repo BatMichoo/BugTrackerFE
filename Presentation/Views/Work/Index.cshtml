@@ -73,8 +73,8 @@
                             <td>@item.Priority</td>
                             <td>@item.Status</td>
                             <td>@item.Title</td>
-                            <td>@item.CreatedBy</td>
-                            <td>@item.AssignedTo</td>
+                            <td>@item.CreatedBy.Name</td>
+                            <td>@(item.AssignedTo == null ? string.Empty : item.AssignedTo.Name)</td>
                             <td>
                                 <div class="actions-container">
                                     <a asp-action="Get" asp-route-id="@item.Id">Open</a>
@@ -90,7 +90,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>@Model.PageInfo.ElementsPerPage</td>
+                    <td>@Model?.ResultItemCount / @Model?.PageInfo.ElementsPerPage</td>
                     <td>
                         <a href=""> < </a>
                         @Model?.PageInfo.CurrentPage / @Model?.PageInfo.PageCount

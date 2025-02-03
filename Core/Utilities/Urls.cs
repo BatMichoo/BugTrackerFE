@@ -21,6 +21,11 @@
             public const string Base = Bug.Base + "/{bugId}/comments";
         }
 
+        public static class User
+        {
+            public const string Base = "/users";
+        }
+
         public static string ToFormattableString(string stringToFormat)
         {
 
